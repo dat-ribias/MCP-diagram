@@ -5,7 +5,7 @@
 
 import { getUserLocale } from "./config-manager"
 
-export type MenuLocale = "en" | "zh" | "ja" | "zh-Hant"
+export type MenuLocale = "en" | "zh" | "ja" | "zh-Hant" | "vi"
 
 export interface MenuTranslations {
     // App menu (macOS only)
@@ -147,6 +147,34 @@ const translations: Record<MenuLocale, MenuTranslations> = {
         documentation: "文件",
         reportIssue: "回報問題",
     },
+
+    vi: {
+        // App menu
+        settings: "Cài đặt...",
+
+        // File menu
+        file: "Tệp",
+
+        // Edit menu
+        edit: "Chỉnh sửa",
+
+        // View menu
+        view: "Xem",
+
+        // Configuration menu
+        configuration: "Cấu hình",
+        switchPreset: "Chuyển đổi cấu hình",
+        managePresets: "Quản lý cấu hình...",
+        addConfigurationPreset: "Thêm cấu hình sẵn...",
+
+        // Window menu
+        window: "Cửa sổ",
+
+        // Help menu
+        help: "Trợ giúp",
+        documentation: "Tài liệu",
+        reportIssue: "Báo cáo lỗi",
+    },
 }
 
 /**
@@ -169,6 +197,7 @@ export function getMenuTranslations(locale: string): MenuTranslations {
 
     if (normalized === "zh") return translations.zh
     if (normalized === "ja") return translations.ja
+    if (normalized === "vi") return translations.vi
     return translations.en
 }
 
@@ -192,6 +221,7 @@ export function detectSystemLocale(appLocale: string): MenuLocale {
 
     if (normalized === "zh") return "zh"
     if (normalized === "ja") return "ja"
+    if (normalized === "vi") return "vi"
     return "en"
 }
 

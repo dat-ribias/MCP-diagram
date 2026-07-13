@@ -263,12 +263,12 @@ export function registerIpcHandlers(): void {
 
     ipcMain.handle("set-user-locale", (_event, locale: string) => {
         // Validate locale is one of the supported values
-        if (!["en", "zh", "ja", "zh-Hant"].includes(locale)) {
+        if (!["en", "zh", "ja", "zh-Hant", "vi"].includes(locale)) {
             return { success: false, error: "Invalid locale" }
         }
 
         try {
-            setUserLocale(locale as "en" | "zh" | "ja" | "zh-Hant")
+            setUserLocale(locale as "en" | "zh" | "ja" | "zh-Hant" | "vi")
             // Rebuild the menu to reflect the new locale
             rebuildAppMenu()
             return { success: true }

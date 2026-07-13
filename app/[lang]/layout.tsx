@@ -42,7 +42,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
     const { lang: rawLang } = await params
     const lang = (
-        rawLang in { en: 1, zh: 1, ja: 1, "zh-Hant": 1 } ? rawLang : "en"
+        rawLang in { en: 1, zh: 1, ja: 1, "zh-Hant": 1, vi: 1 } ? rawLang : "en"
     ) as Locale
 
     // Default to English metadata
@@ -51,6 +51,7 @@ export async function generateMetadata({
         zh: "Next AI Draw.io - AI powered diagram generator",
         ja: "Next AI Draw.io - AI-powered diagram generator",
         "zh-Hant": "Next AI Draw.io - AI 驅動的圖表產生器",
+        vi: "Next AI Draw.io - Trình tạo sơ đồ hỗ trợ AI",
     }
 
     const descriptions: Record<Locale, string> = {
@@ -59,6 +60,7 @@ export async function generateMetadata({
         ja: "Create AWS architecture diagrams, flowcharts, and technical diagrams using AI. Create professional diagrams with a free online tool that integrates draw.io with an AI assistant.",
         "zh-Hant":
             "使用 AI 建立 AWS 架構圖、流程圖和技術圖表。免費線上工具整合 draw.io 與 AI 輔助，輕鬆建立專業圖表。",
+        vi: "Tạo sơ đồ kiến trúc AWS, sơ đồ luồng và sơ đồ kỹ thuật bằng AI. Công cụ trực tuyến miễn phí tích hợp draw.io với sự hỗ trợ của AI giúp tạo sơ đồ chuyên nghiệp.",
     }
 
     return {
@@ -92,7 +94,9 @@ export async function generateMetadata({
                       ? "zh_HK"
                       : lang === "ja"
                         ? "ja_JP"
-                        : "en_US",
+                        : lang === "vi"
+                          ? "vi_VN"
+                          : "en_US",
             images: [
                 {
                     url: "/architecture.png",
@@ -128,6 +132,7 @@ export async function generateMetadata({
                 zh: "/zh",
                 ja: "/ja",
                 "zh-Hant": "/zh-Hant",
+                vi: "/vi",
             },
         },
     }

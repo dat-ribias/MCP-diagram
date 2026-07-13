@@ -4,7 +4,7 @@
 
 **AI-Powered Diagram Creation Tool - Chat, Draw, Visualize**
 
-English | [中文](./docs/cn/README_CN.md) | [日本語](./docs/ja/README_JA.md)
+English | [中文](./docs/cn/README_CN.md) | [日本語](./docs/ja/README_JA.md) | Tiếng Việt
 
 [![TrendShift](https://trendshift.io/api/badge/repositories/15449)](https://next-ai-drawio.jiang.jp/)
 
@@ -143,7 +143,7 @@ No installation needed! Try the app directly on our demo site:
 
 ### Desktop Application
 
-Download the native desktop app for your platform from the [Releases page](https://github.com/DayuanJiang/next-ai-draw-io/releases):
+Download the native desktop app for your platform from the [Releases page](https://github.com/dat-ribias/MCP-diagram/releases):
 
 Supported platforms: Windows, macOS, Linux.
 
@@ -156,7 +156,7 @@ Supported platforms: Windows, macOS, Linux.
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/DayuanJiang/next-ai-draw-io
+git clone https://github.com/dat-ribias/MCP-diagram
 cd next-ai-draw-io
 npm install
 cp env.example .env.local
@@ -180,7 +180,7 @@ You can deploy with one click using [Tencent EdgeOne Pages](https://pages.edgeon
 
 Deploy by this button: 
 
-[![Deploy to EdgeOne Pages](https://cdnstatic.tencentcs.com/edgeone/pages/deploy.svg)](https://edgeone.ai/pages/new?repository-url=https%3A%2F%2Fgithub.com%2FDayuanJiang%2Fnext-ai-draw-io)
+[![Deploy to EdgeOne Pages](https://cdnstatic.tencentcs.com/edgeone/pages/deploy.svg)](https://edgeone.ai/pages/new?repository-url=https%3A%2F%2Fgithub.com%2Fdat-ribias%2FMCP-diagram)
 
 Check out the [Tencent EdgeOne Pages documentation](https://pages.edgeone.ai/document/deployment-overview) for more details.
 
@@ -188,7 +188,7 @@ Additionally, deploying through Tencent EdgeOne Pages will also grant you a [dai
 
 ### Deploy on Vercel 
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FDayuanJiang%2Fnext-ai-draw-io)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fdat-ribias%2FMCP-diagram)
 
 The easiest way to deploy is using [Vercel](https://vercel.com/new), the creators of Next.js. Be sure to **set the environment variables** in the Vercel dashboard as you did in your local `.env.local` file.
 
@@ -265,6 +265,6 @@ See [FAQ](./docs/en/FAQ.md) for common issues and solutions.
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=DayuanJiang/next-ai-draw-io&type=date&legend=top-left)](https://www.star-history.com/#DayuanJiang/next-ai-draw-io&type=date&legend=top-left)
+[![Star History Chart](https://api.star-history.com/svg?repos=dat-ribias/MCP-diagram&type=date&legend=top-left)](https://www.star-history.com/#dat-ribias/MCP-diagram&type=date&legend=top-left)
 
 ---
