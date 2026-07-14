@@ -104,6 +104,7 @@ Use the standard MCP configuration with:
 ## Features
 
 - **Real-time Preview**: Diagrams appear and update in your browser as the AI creates them
+- **Language & Theme Customization**: Select your preferred language (Tiếng Việt, English, 日本語, 简体中文) and interface mode (Light Mode/Dark Mode) right from the header dropdowns. Your preferences are saved in `localStorage`.
 - **Version History**: Restore previous diagram versions with visual thumbnails - click the clock button (bottom-right) to browse and restore earlier states
 - **Natural Language**: Describe diagrams in plain text - flowcharts, architecture diagrams, etc.
 - **Edit Support**: Modify existing diagrams with natural language instructions

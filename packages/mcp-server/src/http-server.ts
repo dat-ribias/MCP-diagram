@@ -621,6 +621,16 @@ function getHtmlPage(sessionId: string): string {
             border-radius: 0 8px 8px 0; font-size: 13px; color: #71717a;
             font-family: 'SF Mono', Monaco, monospace;
         }
+        .header-control {
+            padding: 6px 10px; border-radius: 8px; font-size: 13px;
+            background: #f4f4f5; color: #3f3f46; border: 1px solid #e4e4e7;
+            cursor: pointer; font-weight: 500; font-family: inherit;
+            outline: none; transition: all 0.15s ease;
+            margin-right: 4px;
+        }
+        .header-control:hover {
+            background: #e4e4e7; border-color: #d4d4d8;
+        }
     </style>
 </head>
 <body>
@@ -638,6 +648,16 @@ function getHtmlPage(sessionId: string): string {
                 ${sessionId ? `<span class="session">${sessionId.slice(-8)}</span>` : ""}
             </div>
             <div class="right">
+                <select id="lang-select" class="header-control">
+                    <option value="vi">Tiếng Việt</option>
+                    <option value="en">English</option>
+                    <option value="ja">日本語</option>
+                    <option value="zh">简体中文</option>
+                </select>
+                <select id="theme-select" class="header-control">
+                    <option value="light">Light Mode</option>
+                    <option value="dark">Dark Mode</option>
+                </select>
                 <button id="history-btn" title="History" ${sessionId ? "" : "disabled"}>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="10"></circle>
@@ -655,7 +675,7 @@ function getHtmlPage(sessionId: string): string {
                 </button>
             </div>
         </div>
-        <iframe id="drawio" src="${normalizeUrl(DRAWIO_BASE_URL)}/?embed=1&proto=json&spin=1&libraries=1&noSaveBtn=1&noExitBtn=1&saveAndExit=0"></iframe>
+        <iframe id="drawio" src=""></iframe>
     </div>
     <div id="history-modal">
         <div class="modal-content">
@@ -705,6 +725,42 @@ function getHtmlPage(sessionId: string): string {
         let pendingMcpExport = null; // 'png' or 'svg' when MCP requested export
         let projectionExportActive = false; // page-targeted export: showing a transient single-page projection
         let projectionRestoreXml = null; // the real document to reload once a projection export finishes
+
+        // Language & Theme setup
+        const savedLang = localStorage.getItem('drawio-mcp-lang') || 'vi';
+        const savedTheme = localStorage.getItem('drawio-mcp-theme') || 'light';
+        const langSelect = document.getElementById('lang-select');
+        const themeSelect = document.getElementById('theme-select');
+        if (langSelect) langSelect.value = savedLang;
+        if (themeSelect) themeSelect.value = savedTheme;
+
+        function updateIframeSrc() {
+            const lang = langSelect ? langSelect.value : 'vi';
+            const theme = themeSelect ? themeSelect.value : 'light';
+            localStorage.setItem('drawio-mcp-lang', lang);
+            localStorage.setItem('drawio-mcp-theme', theme);
+            const isDark = theme === 'dark';
+            const drawioBaseUrl = "${normalizeUrl(DRAWIO_BASE_URL)}";
+            isReady = false;
+            pendingXml = lastXml; // reload current diagram on load
+            const params = new URLSearchParams({
+                embed: '1',
+                proto: 'json',
+                spin: '1',
+                libraries: '1',
+                noSaveBtn: '1',
+                noExitBtn: '1',
+                saveAndExit: '0',
+                lang: lang,
+                dark: isDark ? '1' : '0',
+                ui: isDark ? 'dark' : 'kennedy'
+            });
+            iframe.src = drawioBaseUrl + '/?' + params.toString();
+        }
+
+        if (langSelect) langSelect.addEventListener('change', updateIframeSrc);
+        if (themeSelect) themeSelect.addEventListener('change', updateIframeSrc);
+        updateIframeSrc();
 
         window.addEventListener('message', (e) => {
             if (e.origin !== '${DRAWIO_ORIGIN}') return;
