@@ -461,7 +461,7 @@ function getHtmlPage(sessionId: string): string {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Next AI Draw.io</title>
+    <title>diagram</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap');
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -644,7 +644,7 @@ function getHtmlPage(sessionId: string): string {
                         </g>
                     </svg>
                 </div>
-                <span class="title">Next AI Draw.io</span>
+                <span class="title">diagram</span>
                 ${sessionId ? `<span class="session">${sessionId.slice(-8)}</span>` : ""}
             </div>
             <div class="right">
@@ -805,18 +805,25 @@ function getHtmlPage(sessionId: string): string {
                         const dl = pendingDownload;
                         pendingDownload = null;
                         let dataUrl = msg.data;
+                        let isBlob = false;
                         if (!dataUrl.startsWith('data:')) {
                             const mime = dl.format === 'png' ? 'image/png' : 'image/svg+xml';
-                            dataUrl = 'data:' + mime + ';base64,' + btoa(unescape(encodeURIComponent(msg.data)));
+                            const blob = new Blob([msg.data], { type: mime });
+                            dataUrl = URL.createObjectURL(blob);
+                            isBlob = true;
                         }
                         const a = document.createElement('a');
                         a.href = dataUrl; a.download = dl.filename;
                         document.body.appendChild(a); a.click(); document.body.removeChild(a);
+                        if (isBlob) {
+                            setTimeout(() => URL.revokeObjectURL(dataUrl), 1000);
+                        }
                         saveModal.classList.remove('open');
                         saveConfirmBtn.disabled = false;
                         saveConfirmBtn.textContent = 'Save';
                         return;
                     }
+
                     // Handle sync export (XML format) - server requested fresh state
                     if (pendingSyncExport && !msg.data.startsWith('data:') && !msg.data.startsWith('<svg')) {
                         pendingSyncExport = false;
@@ -996,7 +1003,7 @@ function getHtmlPage(sessionId: string): string {
                 const a = document.createElement('a');
                 a.href = url; a.download = filename;
                 document.body.appendChild(a); a.click(); document.body.removeChild(a);
-                URL.revokeObjectURL(url);
+                setTimeout(() => URL.revokeObjectURL(url), 1000);
                 saveModal.classList.remove('open');
                 saveConfirmBtn.disabled = false;
                 saveConfirmBtn.textContent = 'Save';

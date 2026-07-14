@@ -989,6 +989,9 @@ server.registerTool(
                     filePath = `${filePath}.drawio`
                 }
                 const absolutePath = nodePath.resolve(filePath)
+                await fs.mkdir(nodePath.dirname(absolutePath), {
+                    recursive: true,
+                })
 
                 let outXml = currentSession.xml
                 if (hasPageSelector(pageSelector)) {
@@ -1122,6 +1125,7 @@ server.registerTool(
             }
 
             // Decode and write
+            await fs.mkdir(nodePath.dirname(absolutePath), { recursive: true })
             if (detectedFormat === "png") {
                 const base64 = exportData.replace(
                     /^data:image\/png;base64,/,
@@ -1577,7 +1581,7 @@ process.stdout.on("error", (err) => {
 
 // Start the MCP server
 async function main() {
-    log.info("Starting MCP server for Next AI Draw.io (embedded mode)...")
+    log.info("Starting MCP server for diagram (embedded mode)...")
 
     const transport = new StdioServerTransport()
     await server.connect(transport)

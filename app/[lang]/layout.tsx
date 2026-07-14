@@ -47,11 +47,11 @@ export async function generateMetadata({
 
     // Default to English metadata
     const titles: Record<Locale, string> = {
-        en: "Next AI Draw.io - AI-Powered Diagram Generator",
-        zh: "Next AI Draw.io - AI powered diagram generator",
-        ja: "Next AI Draw.io - AI-powered diagram generator",
-        "zh-Hant": "Next AI Draw.io - AI 驅動的圖表產生器",
-        vi: "Next AI Draw.io - Trình tạo sơ đồ hỗ trợ AI",
+        en: "diagram - AI-Powered Diagram Generator",
+        zh: "diagram - AI powered diagram generator",
+        ja: "diagram - AI-powered diagram generator",
+        "zh-Hant": "diagram - AI 驅動的圖表產生器",
+        vi: "diagram - Trình tạo sơ đồ hỗ trợ AI",
     }
 
     const descriptions: Record<Locale, string> = {
@@ -77,16 +77,16 @@ export async function generateMetadata({
             "free diagram generator",
             "online diagram maker",
         ],
-        authors: [{ name: "Next AI Draw.io" }],
-        creator: "Next AI Draw.io",
-        publisher: "Next AI Draw.io",
+        authors: [{ name: "diagram" }],
+        creator: "diagram",
+        publisher: "diagram",
         metadataBase: new URL("https://next-ai-drawio.jiang.jp"),
         openGraph: {
             title: titles[lang],
             description: descriptions[lang],
             type: "website",
             url: "https://next-ai-drawio.jiang.jp",
-            siteName: "Next AI Draw.io",
+            siteName: "diagram",
             locale:
                 lang === "zh"
                     ? "zh_CN"
@@ -102,7 +102,7 @@ export async function generateMetadata({
                     url: "/architecture.png",
                     width: 1200,
                     height: 630,
-                    alt: "Next AI Draw.io - AI-powered diagram creation tool",
+                    alt: "diagram - AI-powered diagram creation tool",
                 },
             ],
         },
@@ -153,7 +153,7 @@ export default async function RootLayout({
     const jsonLd = {
         "@context": "https://schema.org",
         "@type": "SoftwareApplication",
-        name: "Next AI Draw.io",
+        name: "diagram",
         applicationCategory: "DesignApplication",
         operatingSystem: "Web Browser",
         description:
