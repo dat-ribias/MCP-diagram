@@ -103,6 +103,23 @@ const server = new McpServer({
     version: packageVersion,
 })
 
+const readOnlyAnnotations = {
+    readOnlyHint: true,
+    destructiveHint: false,
+    openWorldHint: false,
+    idempotentHint: true,
+} as const
+const writeAnnotations = {
+    readOnlyHint: false,
+    destructiveHint: false,
+    openWorldHint: false,
+} as const
+const destructiveAnnotations = {
+    readOnlyHint: false,
+    destructiveHint: true,
+    openWorldHint: false,
+} as const
+
 // Shared Zod schema fragment for page-targeting parameters.
 // Every multi-page-aware tool reuses these three optional fields so the LLM
 // learns one consistent interface.
@@ -208,6 +225,7 @@ server.registerTool(
             "Starts an embedded server and opens a browser window with draw.io. " +
             "The browser will show diagram updates as they happen.",
         inputSchema: {},
+        annotations: writeAnnotations,
     },
     async () => {
         try {
@@ -225,7 +243,11 @@ server.registerTool(
 
             // Open browser
             const browserUrl = `http://localhost:${port}?mcp=${sessionId}`
-            await open(browserUrl)
+            // AI Team: DRAWIO_BROWSER = trình duyệt công cụ không bị hãm timer (tránh export timeout khi tab nằm nền)
+            const browserApp = process.env.DRAWIO_BROWSER
+                ? { app: { name: process.env.DRAWIO_BROWSER, arguments: JSON.parse(process.env.DRAWIO_BROWSER_ARGS || "[]") } }
+                : undefined
+            await open(browserUrl, browserApp)
 
             log.info(`Started session ${sessionId}, browser at ${browserUrl}`)
 
@@ -312,6 +334,7 @@ COMMON STYLES:
 - Shapes: rounded=1; fillColor=#hex; strokeColor=#hex
 - Edges: endArrow=classic; edgeStyle=orthogonalEdgeStyle; curved=1
 - Text: fontSize=14; fontStyle=1 (bold); align=center`,
+        annotations: destructiveAnnotations,
         inputSchema: {
             xml: z
                 .string()
@@ -443,6 +466,7 @@ server.registerTool(
             "The server reads the file directly — you do NOT need to read the file yourself or pass its XML through create_new_diagram. " +
             "Handles both plain-XML and draw.io's compressed save format.\n\n" +
             "After loading, call get_diagram before edit_diagram — you haven't seen the file's cell IDs or structure yet.",
+        annotations: destructiveAnnotations,
         inputSchema: {
             path: z
                 .string()
@@ -580,6 +604,7 @@ server.registerTool(
             '{"page_index": 1, "operations": [{"operation": "update", "cell_id": "3", "new_xml": "<mxCell id=\\"3\\" .../>"}]}\n\n' +
             "Example - Delete a cell on the default page:\n" +
             '{"operations": [{"operation": "delete", "cell_id": "rect-1"}]}',
+        annotations: destructiveAnnotations,
         inputSchema: {
             ...pageSelectorSchema,
             operations: z
@@ -791,6 +816,7 @@ server.registerTool(
             "e.g. before editing a diagram you didn't create in this conversation, or after edit_diagram " +
             "was rejected because the user changed the diagram in the browser.\n\n" +
             "Returns the full <mxfile> by default. If a page selector is provided, returns just that page's <mxGraphModel> embedded in a one-page <mxfile> wrapper.",
+        annotations: readOnlyAnnotations,
         inputSchema: {
             ...pageSelectorSchema,
         },
@@ -920,6 +946,7 @@ server.registerTool(
             "- .drawio with a page selector: writes a single-page <mxfile> containing only that page.\n" +
             "- .png / .svg with NO page selector: exports the currently active page in the browser.\n" +
             "- .png / .svg with a page selector: temporarily loads a single-page projection of that page into the browser, captures the rendered image, then restores the full document. The user will see a brief tab-flicker (~1-2s) but the exported image is guaranteed to be the requested page.",
+        annotations: destructiveAnnotations,
         inputSchema: {
             ...pageSelectorSchema,
             path: z
@@ -1239,6 +1266,7 @@ server.registerTool(
     {
         description:
             "List every page (tab) in the current diagram. Returns each page's id, name, 0-based index, and cell count. Use this to discover what pages exist before targeting one with edit_diagram, get_diagram, export_diagram, rename_page, or delete_page.",
+        annotations: readOnlyAnnotations,
         inputSchema: {},
     },
     async () => {
@@ -1298,6 +1326,7 @@ server.registerTool(
             "- id: optional explicit page id; if omitted the server generates a short alphanumeric id\n" +
             '- xml: optional starting <mxGraphModel> for the new page. If omitted, the page starts blank with the standard root sentinel cells ("0" and "1").\n\n' +
             "Returns the new page's id, name, and index so the caller can immediately target it with edit_diagram.",
+        annotations: writeAnnotations,
         inputSchema: {
             name: z
                 .string()
@@ -1401,6 +1430,7 @@ server.registerTool(
     {
         description:
             "Rename an existing page (tab). At least one of page_id / page_name / page_index is required to identify which page to rename. The new_name becomes the visible tab label in the editor.",
+        annotations: writeAnnotations,
         inputSchema: {
             ...pageSelectorSchema,
             new_name: z
@@ -1481,6 +1511,7 @@ server.registerTool(
     {
         description:
             "Delete a page (tab) from the current diagram. At least one of page_id / page_name / page_index is required. Refuses to delete the last remaining page — the editor needs at least one tab.",
+        annotations: destructiveAnnotations,
         inputSchema: {
             ...pageSelectorSchema,
         },
